@@ -18,31 +18,36 @@
  */
 
 /*
- * Copyright (c) 2018, Open AI Lab
- * Author: haitao@openailab.com
+ * Copyright (c) 2019, Open AI Lab
+ * Author: chunyinglv@openailab.com
  */
 
-namespace TEngine {
+#ifndef __WINO_CONFIG_H__
+#define __WINO_CONFIG_H__
 
-extern void RegisterConv2dFast(void);
-extern void RegisterConv2dWinograd(void);
-extern void RegisterConv2dDepth3x3(void);
-extern void RegisterConv2dDepth(void);
-extern void RegisterConv2dDepthDilation(void);
-extern void RegisterConv2dDepthK5(void);
-extern void RegisterConv2dDepthK7(void);
-extern void RegisterConv2dDirect3x3Dilation(void);
+#define KER_COUT_UNIT 16
+#define KER_COUT_UNIT4 4
+#define ELEM_SIZE 36
+#define TILE 4
+#define BLOCK_HW_UNIT 4
 
-void __attribute__((visibility("default"))) RegisterArmOps(void)
+// cpu type
+#define TYPE_A53 0
+#define TYPE_A72 1
+
+#define WINO_MAX(a, b) ((a) > (b) ? (a) : (b))
+#define WINO_MIN(a, b) ((a) < (b) ? (a) : (b))
+static inline float do_activation(float input, int activation)
 {
-    RegisterConv2dFast();
-    RegisterConv2dWinograd();
-    RegisterConv2dDepth3x3();
-    RegisterConv2dDepth();
-    RegisterConv2dDepthDilation();
-    RegisterConv2dDepthK5();
-    RegisterConv2dDepthK7();
-    RegisterConv2dDirect3x3Dilation();
+    if(activation == 0)
+    {
+        input = WINO_MAX(input, 0);
+        if(activation == 6)
+            input = WINO_MIN(input, 6);
+    }
+    return input;
 }
+//
+// static int UNIT_INPUT_NO_CIN = BLOCK_HW_UNIT * ELEM_SIZE;
 
-}    // namespace TEngine
+#endif    // __WINO_CONFIG_H__

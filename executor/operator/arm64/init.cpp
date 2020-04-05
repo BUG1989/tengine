@@ -25,6 +25,8 @@
 namespace TEngine {
 
 extern void RegisterConv2dFast(void);
+extern void RegisterConv2dWinograd(void);
+extern void RegisterConv2dWinograd_1(void);
 extern void RegisterConv2dDepth(void);
 extern void RegisterConv2dDepth3x3(void);
 extern void RegisterConv2dDepthDilation(void);
@@ -35,6 +37,8 @@ extern void RegisterConv2dDirect3x3Dilation(void);
 void __attribute__((visibility("default"))) RegisterArmOps(void)
 {
     RegisterConv2dFast();
+    RegisterConv2dWinograd();
+    RegisterConv2dWinograd_1();
     RegisterConv2dDepth();
     RegisterConv2dDepth3x3();
     RegisterConv2dDepthDilation();
